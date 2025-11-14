@@ -12,11 +12,18 @@ public class CashRegister {
     public ArrayList<ArrayList<Integer>> getDenoms() {
         try ( BufferedReader br = new BufferedReader(new FileReader("balance.txt"));){
             String line;
-            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            ArrayList<ArrayList<Integer>> denoms = new ArrayList<>();
             while((line = br.readLine())!=null){
-                StringTokenizer st = new StringTokenizer(line,"_");
-                System.out.println(line);
+                StringTokenizer st = new StringTokenizer(line,"=");
+                String denom = st.nextToken();
+                StringTokenizer finalSt = new StringTokenizer(denom, "_");
+                ArrayList<Integer> dataPairs = new ArrayList<>();
+                finalSt.nextToken();
+                dataPairs.add(Integer.parseInt(finalSt.nextToken()));
+                dataPairs.add(Integer.parseInt(st.nextToken()));
+                denoms.add(dataPairs);
             }
+            return denoms;
 
 
             } catch (FileNotFoundException e) {
@@ -24,8 +31,6 @@ public class CashRegister {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 }
 

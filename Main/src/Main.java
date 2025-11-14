@@ -16,7 +16,7 @@ public class Main {
         File file = new File("balance.txt");
         try {
             FileWriter fw = new FileWriter("balance.txt");
-            fw.write("BALANCE=50000\nDENOM_2000_10\nDENOM_1000_10\nDENOM_500_20\nDENOM_200_40\nDENOM_100_100 ");
+            fw.write("BALANCE=50000\nDENOM_2000=10\nDENOM_1000=10\nDENOM_500=20\nDENOM_200=40\nDENOM_100=100 ");
             fw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
