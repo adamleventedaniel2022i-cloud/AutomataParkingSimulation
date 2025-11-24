@@ -5,15 +5,19 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+    Scanner sc =new Scanner(System.in);
+    CashRegister cr = new CashRegister();
 
     config();
-    CashRegister cr = new CashRegister();
-    cr.getDenoms();
-
-
-        System.out.println("***********");
-        System.out.println("   Hello");
-        System.out.println("***********");
+        System.out.println("**********************");
+        System.out.println("   Parkolóautomata");
+        System.out.println("**********************");
+        System.out.print("Kérem adja meg a Zónát:");
+        String zone = sc.nextLine().strip();
+        System.out.print("Adja meg parkolás időtartamát percben:");
+        int min = Integer.parseInt(sc.nextLine().strip());
+        Transaction transaction = new Transaction(zone, min);
+        transaction(transaction);
 
     }
 
@@ -25,6 +29,39 @@ public class Main {
             fw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+    public static void transaction(Transaction transaction){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Tranzakció");
+        int fizetendo = transaction.getFee();
+        while (fizetendo>0){
+            System.out.println("Fizess (pénznemek: 2000, 1000, 500, 200, 100):");
+            int money = Integer.parseInt(sc.nextLine().strip());
+            switch (money) {
+                case 2000:
+                    fizetendo-=money;
+                    break;
+                case 1000:
+                    fizetendo-=money;
+                    break;
+                case 500:
+                    fizetendo-=money;
+                    break;
+                case 200:
+                    fizetendo-=money;
+                    break;
+                case 100:
+                    fizetendo-=money;
+                    break;
+                default:
+                    System.out.println("Nem megfelelő pénznem (pénznemek: 2000, 1000, 500, 200, 100)");
+            }
+        }
+        if (fizetendo<0){
+            transaction.setChange(fizetendo*(-1));
+        } else {
+            transaction.setChange(0);
         }
     }
 }

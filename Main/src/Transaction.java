@@ -4,16 +4,22 @@ public class Transaction {
     private int min;
     private int DENOM;
     private int fee;
-    private int deposit;
     private int change;
+    CashRegister cashRegister = new CashRegister();
 
-    public Transaction(String zone, int min, int DENOM, int deposit) {
+    public Transaction(String zone, int min) {
         this.zone = zone;
         this.min = min;
-        this.DENOM = DENOM;
-        this.deposit = deposit;
         this.fee = calculateFee();
-        this.change = deposit - fee;
+        /*this.change = ;*/
+    }
+
+    public int getChange() {
+        return change;
+    }
+
+    public void setChange(int change) {
+        this.change = change;
     }
 
     public String getZone() {
@@ -34,12 +40,8 @@ public class Transaction {
         this.fee = calculateFee();
     }
 
-    public int getDENOM() {
-        return DENOM;
-    }
-
-    public void setDENOM(int DENOM) {
-        this.DENOM = DENOM;
+    public void setFee(int fee) {
+        this.fee = fee;
     }
 
     public int getFee() {
@@ -76,20 +78,7 @@ public class Transaction {
         return 0;
     }
 
-    public int getDeposit() {
-        return deposit;
-    }
 
-    public void setDeposit(int deposit) {
-        this.deposit = deposit;
-        this.change = deposit - fee;
-    }
 
-    public int getChange() {
-        return change;
-    }
 
-    public void setChange(int change) {
-        this.change = change;
-    }
 }
