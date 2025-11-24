@@ -1,7 +1,5 @@
-import java.util.Date;
-
 public class Transaction {
-    private Date date;
+
     private String zone;
     private int min;
     private int DENOM;
@@ -9,22 +7,13 @@ public class Transaction {
     private int deposit;
     private int change;
 
-    public Transaction(Date date, String zone, int min, int DENOM, int fee, int deposit, int change) {
-        this.setDate(date);
-        this.setZone(zone);
-        this.setMin(min);
-        this.setDENOM(DENOM);
-        this.setFee(fee);
-        this.setDeposit(deposit);
-        this.setChange(change);
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public Transaction(String zone, int min, int DENOM, int deposit) {
+        this.zone = zone;
+        this.min = min;
+        this.DENOM = DENOM;
+        this.deposit = deposit;
+        this.fee = calculateFee();
+        this.change = deposit - fee;
     }
 
     public String getZone() {
@@ -33,6 +22,7 @@ public class Transaction {
 
     public void setZone(String zone) {
         this.zone = zone;
+        this.fee = calculateFee();
     }
 
     public int getMin() {
@@ -41,6 +31,7 @@ public class Transaction {
 
     public void setMin(int min) {
         this.min = min;
+        this.fee = calculateFee();
     }
 
     public int getDENOM() {
@@ -55,8 +46,34 @@ public class Transaction {
         return fee;
     }
 
-    public void setFee(int fee) {
-        this.fee = fee;
+    private int calculateFee() {
+        int hours = min / 60;
+        switch (zone) {
+            case "A":
+                if (min <= 180) {
+                    return 300 * hours;
+                } else if (min > 180) {
+                    return 300 * hours * ((min-180)/2);
+                }
+                break;
+            case "B":
+                if (min <= 360) {
+                    return 200 * hours;
+                } else if (min > 360) {
+                    return 200 * hours * ((min-360)/2);
+                }
+                break;
+            case "C":
+                if (min <= 720) {
+                    return 150 * hours;
+                } else if (min > 720) {
+                    return 150 * hours * ((min-720)/2);
+                }
+                break;
+            default:
+                throw new RuntimeException("Nem megfelelő zónát adtál meg!");
+        }
+        return 0;
     }
 
     public int getDeposit() {
@@ -65,6 +82,7 @@ public class Transaction {
 
     public void setDeposit(int deposit) {
         this.deposit = deposit;
+        this.change = deposit - fee;
     }
 
     public int getChange() {
