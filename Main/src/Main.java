@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -18,6 +19,7 @@ public class Main {
         int min = Integer.parseInt(sc.nextLine().strip());
         Transaction transaction = new Transaction(zone, min);
         transaction(transaction);
+        Change(transaction,cr);
 
     }
 
@@ -35,6 +37,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         System.out.println("Tranzakció");
         int fizetendo = transaction.getFee();
+        System.out.println(fizetendo);
         while (fizetendo>0){
             System.out.println("Fizess (pénznemek: 2000, 1000, 500, 200, 100):");
             int money = Integer.parseInt(sc.nextLine().strip());
@@ -63,5 +66,22 @@ public class Main {
         } else {
             transaction.setChange(0);
         }
+    }
+
+    public static void Change(Transaction transaction, CashRegister cashRegister ){
+        int visszaJaro =transaction.getChange();
+        ArrayList<ArrayList<Integer>> penz = cashRegister.getDenoms();
+        System.out.println(visszaJaro);
+        for (int i = 0; i < penz.size(); i++) {
+            if(penz.get(i).get(0)< visszaJaro && penz.get(i).get(1) > 0){
+                visszaJaro -= penz.get(i).get(0);
+                System.out.println(visszaJaro);
+            }
+            if (visszaJaro<100){
+                System.out.println("A maradák visszajárandó összeg: "+visszaJaro+"\n A legkisebb cimlet 100, ezért banki utálassal kapja mega fennmaradó összeget!");
+
+            }
+        }
+
     }
 }

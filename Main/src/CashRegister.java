@@ -17,7 +17,7 @@ public class CashRegister {
             while((line = br.readLine())!=null){
                 StringTokenizer st = new StringTokenizer(line,"=");
                 String denom = st.nextToken();
-                System.out.println(denom);
+
                 StringTokenizer finalSt = new StringTokenizer(denom, "_");
                 ArrayList<Integer> dataPairs = new ArrayList<>();
                 finalSt.nextToken();
