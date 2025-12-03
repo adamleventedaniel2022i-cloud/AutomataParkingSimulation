@@ -4,11 +4,17 @@ public class Transaction {
     private int min;
     private int fee;
     private int change;
+    private Config config;
+    public Transaction(String zone, int min, Config config) {
+        setZone(zone);
+        setMin(min);
+        setFee(calculateFee());
+        setConfig(config);
+    }
 
-    public Transaction(String zone, int min) {
-        this.zone = zone;
-        this.min = min;
-        this.fee = calculateFee();
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 
     public int getChange() {
@@ -46,26 +52,35 @@ public class Transaction {
     }
 
     private int calculateFee() {
-        int hours = min / 60;
-        switch (zone) {
+        int hours = getMin() / 60;
+        switch (getZone()) {
             case "A":
-                if (min <= 180) {
-                    return 300 * hours;
+                int baseFeeA = 300 * hours;
+                if (getMin() > 180) {
+                    int overtimeMinA = getMin() - 180;
+                    fee = baseFeeA + ((overtimeMinA / 2) * config.getOverstep()) / 100;
                 } else {
-                    return 300 * hours * ((min - 180) / 2);
+                    fee = baseFeeA;
                 }
+                return fee;
             case "B":
-                if (min <= 360) {
-                    return 200 * hours;
+                int baseFeeB = 200 * hours;
+                if (getMin() > 360) {
+                    int overtimeMinB = getMin() - 360;
+                    fee = baseFeeB + ((overtimeMinB / 2) * config.getOverstep()) / 100;
                 } else {
-                    return 200 * hours * ((min - 360) / 2);
+                    fee = baseFeeB;
                 }
+                return fee;
             case "C":
-                if (min <= 720) {
-                    return 150 * hours;
+                int baseFeeC = 150 * hours;
+                if (getMin() > 720) {
+                    int overtimeMinC = getMin() - 720;
+                    fee = baseFeeC + ((overtimeMinC / 2) * config.getOverstep()) / 100;
                 } else {
-                    return 150 * hours * ((min - 720) / 2);
+                    fee = baseFeeC;
                 }
+                return fee;
             default:
                 throw new RuntimeException("Hiba a program nem talált ilyen zónát");
         }

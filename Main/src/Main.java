@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         CashRegister cr = new CashRegister();
         Config config = new Config(50000, 100000, 5000);
         Validator validator = new Validator();
-
         config.writefiles();
         String zone;
         String min;
@@ -38,8 +36,8 @@ public class Main {
                         System.out.print("Adja meg parkolás időtartamát percben:");
                         min = sc.nextLine().strip();
 
-                    } while (validator.inputchek(zone, min));
-                    Transaction transaction = new Transaction(zone, Integer.parseInt(min));
+                    } while (!validator.inputchek(zone, min));
+                    Transaction transaction = new Transaction(zone, Integer.parseInt(min), config);
                     transaction(transaction, cr);
                     Change(transaction, cr);
                     break;

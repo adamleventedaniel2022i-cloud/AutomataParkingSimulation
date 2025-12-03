@@ -46,13 +46,5 @@ public class Config {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        File file2 = new File("change.txt");
-        try {
-            FileWriter fw2 = new FileWriter("change.txt");
-            fw2.write("Change\nDENOM_2000=0\nDENOM_1000=0\nDENOM_500=0\nDENOM_200=0\nDENOM_100=0\nCARD=0");
-            fw2.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
