@@ -2,16 +2,13 @@ public class Transaction {
 
     private String zone;
     private int min;
-    private int DENOM;
     private int fee;
     private int change;
-    CashRegister cashRegister = new CashRegister();
 
     public Transaction(String zone, int min) {
         this.zone = zone;
         this.min = min;
         this.fee = calculateFee();
-        /*this.change = ;*/
     }
 
     public int getChange() {
@@ -54,31 +51,25 @@ public class Transaction {
             case "A":
                 if (min <= 180) {
                     return 300 * hours;
-                } else if (min > 180) {
-                    return 300 * hours * ((min-180)/2);
+                } else {
+                    return 300 * hours * ((min - 180) / 2);
                 }
-                break;
             case "B":
                 if (min <= 360) {
                     return 200 * hours;
-                } else if (min > 360) {
-                    return 200 * hours * ((min-360)/2);
+                } else {
+                    return 200 * hours * ((min - 360) / 2);
                 }
-                break;
             case "C":
                 if (min <= 720) {
                     return 150 * hours;
-                } else if (min > 720) {
-                    return 150 * hours * ((min-720)/2);
+                } else {
+                    return 150 * hours * ((min - 720) / 2);
                 }
-                break;
             default:
-                throw new RuntimeException("Nem megfelelő zónát adtál meg!");
+                throw new RuntimeException("Hiba a program nem talált ilyen zónát");
         }
-        return 0;
     }
-
-
 
 
 }

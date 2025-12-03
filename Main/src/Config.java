@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Config {
     private int startBalance;
     private int limit;
@@ -31,5 +35,24 @@ public class Config {
 
     public void setOverstep(int overstep) {
         this.overstep = overstep;
+    }
+
+    public void writefiles() {
+        File file = new File("balance.txt");
+        try {
+            FileWriter fw = new FileWriter("balance.txt");
+            fw.write("BALANCE=50000\nDENOM_2000=10\nDENOM_1000=10\nDENOM_500=20\nDENOM_200=40\nDENOM_100=100");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File file2 = new File("change.txt");
+        try {
+            FileWriter fw2 = new FileWriter("change.txt");
+            fw2.write("Change\nDENOM_2000=0\nDENOM_1000=0\nDENOM_500=0\nDENOM_200=0\nDENOM_100=0\nCARD=0");
+            fw2.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

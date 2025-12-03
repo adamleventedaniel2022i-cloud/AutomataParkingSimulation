@@ -9,7 +9,7 @@ public class CashRegister {
     private ArrayList<ArrayList<Integer>> denoms;
 
 
-    public ArrayList<ArrayList<Integer>> getDenoms() {
+    public ArrayList<ArrayList<Integer>> getAutomataDenoms() {
         try ( BufferedReader br = new BufferedReader(new FileReader("balance.txt"));){
             String line;
             ArrayList<ArrayList<Integer>> denoms = new ArrayList<>();
@@ -34,6 +34,7 @@ public class CashRegister {
             throw new RuntimeException(e);
         }
     }
+
 }
 
 
