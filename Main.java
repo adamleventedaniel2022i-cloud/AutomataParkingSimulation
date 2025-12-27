@@ -6,6 +6,7 @@ import core.CashRegister;
 import core.ParkingMachine;
 import core.Transaction;
 import validation.Validator;
+
 import java.io.*;
 import java.util.Scanner;
 public class Main {
@@ -47,8 +48,9 @@ public class Main {
                             System.out.print("Adja meg parkolás időtartamát percben:");
                             min = sc.nextLine().strip();
 
-                        } while (!validator.inputcheck(zone, min));
-                        Transaction transaction = new Transaction(zone, Integer.parseInt(min), config);
+                        } while (!validator.inputcheck(zone, min, config, new Transaction(zone, min,config)));
+                        Transaction transaction = new Transaction(zone, min, config);
+                        transaction.setFee(transaction.calculateFee());
                         ParkingMachine.transaction(transaction, cr, validator, config);
                         ParkingMachine.Change(transaction, cr);
                         config.writefiles(cr);
@@ -65,4 +67,10 @@ public class Main {
         }while (run);
 
     }
+
+
+
+
+
+
 }
