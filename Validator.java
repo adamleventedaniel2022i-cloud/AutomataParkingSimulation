@@ -1,12 +1,13 @@
 package validation;
 
 import Exceptions.LimitExceededException;
+import app.Main;
 import config.Config;
 import core.CashRegister;
 import core.Transaction;
 
 public class Validator {
-    public boolean inputcheck(String v1, String v2, Config config, Transaction transactionTEST) {
+    public boolean inputcheck(String v1, String v2, Config config, Transaction transactionTEST,CashRegister cashRegister) {
         if (!(v1.equalsIgnoreCase("A") || v1.equalsIgnoreCase("B") || v1.equalsIgnoreCase("C"))) {
             System.out.println("Hibás Bemenet");
             return false;
@@ -20,7 +21,7 @@ public class Validator {
             }
         }
         try {
-            if ( transactionTEST.calculateFee()  >= config.getLimit()) {
+            if (cashRegister.getCurrentBalance()+ transactionTEST.calculateFee()  >= config.getLimit()) {
                 System.out.println("Díj túl magas: " + v2 + " > limit " + config.getLimit());
                 return false;
             }
@@ -52,7 +53,7 @@ public class Validator {
         }
         return true;
     }
-    public boolean isLimitExceededWithDenomFlowAndIsNumber(String v1, int denom, Config config){
+    public boolean isLimitExceededWithDenomFlowAndIsNumber(String v1, int denom, Config config, CashRegister cashRegister){
         for (int i = 0; i < v1.length(); i++) {
             char c = v1.charAt(i);
             if (!Character.isDigit(c)) {
@@ -60,17 +61,17 @@ public class Validator {
                 return false;
             }
         }
-        if (Integer.parseInt(v1)*denom >= config.getLimit()){
-            System.out.println("A bemenet meghaladná a Limitet: "+config.getLimit());
-            return false;
-        }
         try {
-            if (Integer.parseInt(v1) <= 0) {
+            if (Integer.parseInt(v1) < 0) {
                 System.out.println("Hibás Bemenet");
                 return false;
             }
         } catch (NumberFormatException e) {
             System.out.println("Hibás Bemenet");
+            return false;
+        }
+        if (cashRegister.getCurrentBalance()+Integer.parseInt(v1)*denom >= config.getLimit()){
+            System.out.println("A bemenet meghaladná a Limitet: "+config.getLimit());
             return false;
         }
         return true;
@@ -98,8 +99,18 @@ public class Validator {
         return true;
     }
     public void limitChecker(CashRegister cr, Config config) {
-        if (cr.getCurrentBalance() >= config.getLimit()) {
-            throw new LimitExceededException("Limit átlépve: " + cr.getCurrentBalance() + " >= " + config.getLimit() + "! Esetleges elmaradt pénz visszaszolgáltatása a következő automatánál lehetséges. Leállás!");
+        try {
+            if (cr.getCurrentBalance() >= config.getLimit()) {
+                Main.run=false;
+                throw new LimitExceededException("Limit átlépve: " + cr.getCurrentBalance() + " >= " + config.getLimit() + "! Esetleges elmaradt pénz visszaszolgáltatása a következő automatánál lehetséges. Leállás!");
+
+
+            }
+        }catch (LimitExceededException e){
+
+            System.err.println("Limit átlépve: " + cr.getCurrentBalance() + " >= " + config.getLimit() + "! Esetleges elmaradt pénz visszaszolgáltatása a következő automatánál lehetséges. Leállás!");
+
         }
+
     }
 }

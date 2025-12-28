@@ -9,14 +9,27 @@ import validation.Validator;
 import java.util.ArrayList;
 
 public record Admin(Config config) {
-
-
     public void run(CashRegister cr, Validator validator) {
-        System.out.print("Admin jelszó: ");
-        String jelszo = Main.sc.nextLine().strip();
-        if (!jelszo.equals("admin123")) {
-            throw new AuthenticationException("Hibás jelszó: hozzáférés megtagadva!");
-        }
+        String jelszo="";
+        System.out.print("\nAdmin jelszó vagy ENTER a kilépéshez:");
+        jelszo = Main.sc.nextLine().strip();
+        do {
+            try {
+                if (jelszo.isBlank()){
+                    return;
+                }
+                if (!jelszo.equals("admin123")) {
+                    throw new AuthenticationException("Hibás jelszó: hozzáférés megtagadva!");
+                }
+            } catch (AuthenticationException e) {
+                System.err.println("\n"+e);
+            }
+            if (!jelszo.equals("admin123")){
+                System.out.print("\nAdmin jelszó vagy ENTER a kilépéshez:");
+                jelszo = Main.sc.nextLine().strip();
+            }
+        }while (!jelszo.equals("admin123"));
+
         String input;
         int choice;
         System.out.println("Admin mód aktív");
@@ -36,7 +49,7 @@ public record Admin(Config config) {
                     config().writefiles(cr);
                     break;
                 case 2:
-                    configModositasa(validator);
+                    configModositasa(validator,cr);
                     config.writeConfigFile();
                     break;
                 case 3:
@@ -71,7 +84,7 @@ public record Admin(Config config) {
         do {
             System.out.println("Hány darabot tölt fel? ");
             input = Main.sc.nextLine().strip();
-        }while (!validator.isLimitExceededWithDenomFlowAndIsNumber(input, denom, config));
+        }while (!validator.isLimitExceededWithDenomFlowAndIsNumber(input, denom, config, cr));
         darabszam = Integer.parseInt(input);
         boolean talalt = false;
         for (ArrayList<Integer> pair : cr.getDenoms()) {
@@ -92,14 +105,11 @@ public record Admin(Config config) {
 
     }
 
-    private void configModositasa(Validator validator) {
-
+    private void configModositasa(Validator validator, CashRegister cashRegister) {
         System.out.println("\nJelenlegi config:");
         System.out.println("Start Balance: " + config.getStartBalance());
         System.out.println("Limit: " + config.getLimit());
         System.out.println("Overstep: " + config.getOverstep());
-
-
         String ujStart;
         do {
             System.out.print("\nÚj Start Balance (vagy Enter a megtartáshoz): ");
@@ -109,8 +119,8 @@ public record Admin(Config config) {
         if (!ujStart.isBlank()) {
             int start = Integer.parseInt(ujStart);
 
-            if (start < 40000) {
-                System.out.println("Figyelem a startBalance nem lehet kevesebb mint 40000 ft");
+            if (start > config.getLimit()) {
+                System.out.println("Figyelem a startBalance nem lehet több mint a LIMIT" + config.getLimit());
             } else if (isNotMultipleOf100(start)) {
                 System.out.println("A startBalance összege nem osztható pontosan a rendelkezésre álló címletekkel, maradék keletkezne!");
             } else {
@@ -127,8 +137,8 @@ public record Admin(Config config) {
         if (!ujLimit.isBlank()) {
             int limit = Integer.parseInt(ujLimit);
 
-            if (limit < 40000) {
-                System.out.println("Figyelem a limit nem lehet kevesebb mint 40000 ft");
+            if (limit < config.getStartBalance()||limit<cashRegister.getCurrentBalance()) {
+                System.out.println("Figyelem a limit nem lehet kevesebb mint a STARTBALANCE:"+config.getStartBalance()+" vagy a CURRENTBALANCE:"+ cashRegister.getCurrentBalance());
             } else if (isNotMultipleOf100(limit)) {
                 System.out.println("Az új limit nem osztható pontosan a rendelkezésre álló címletekkel.");
                 System.out.println("A maradék 50 Ft vizsgálata értelmetlen, ajánlott kerekíteni.");
@@ -149,6 +159,7 @@ public record Admin(Config config) {
 
         System.out.println("\nConfig frissítve!");
     }
+
     private boolean isNotMultipleOf100(int value) {
         return value % 100 != 0;
     }

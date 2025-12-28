@@ -5,6 +5,7 @@ import config.Config;
 import validation.Validator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ParkingMachine {
     public static void transaction(Transaction transaction, CashRegister cr, Validator validator, Config config) {
@@ -12,7 +13,7 @@ public class ParkingMachine {
         System.out.println("\nTranzakció");
         int fizetendo = transaction.getFee();
         System.out.println("Fizetendő: " + fizetendo);
-        while (fizetendo > 0) {
+        while (fizetendo > 0 && Main.run) {
             String input;
             do {
                 System.out.println("\nFizess (pénznemek: 2000, 1000, 500, 200, 100):");
@@ -69,32 +70,44 @@ public class ParkingMachine {
                     System.out.println("Nem megfelelő pénznem (pénznemek: 2000, 1000, 500, 200, 100)");
             }
             validator.limitChecker(cr, config);
-            System.out.println("\nMaradék fizetendő: " + Math.max(fizetendo, 0));
+            if (Main.run){
+                System.out.println("\nMaradék fizetendő: " + Math.max(fizetendo, 0));
+            }
+
         }
         config.logTransaction(transaction.getZone(),transaction.getMin(),transaction.getFee());
         transaction.setChange(Math.max(-fizetendo, 0));
+
+
     }
     public static void Change(Transaction transaction, CashRegister cr) {
-        int visszaJaro = transaction.getChange();
-        ArrayList<ArrayList<Integer>> denoms = cr.getDenoms();
-        denoms.sort((a, b) -> a.get(0)-b.get(0));
-        System.out.println("\nVisszajáró: " + visszaJaro);
-        System.out.println("kiadás folyamatban...");
-        for (int i = 0; i < denoms.size(); i++) {
-            ArrayList<Integer> denom = denoms.get(i);
-            int cimlet = denom.get(0);
-            int darab = denom.get(1);
-            while (visszaJaro >= cimlet && darab > 0) {
-                visszaJaro -= cimlet;
-                System.out.println(cimlet+"...");
-                darab--;
+        if (Main.run){
+            int visszaJaro = transaction.getChange();
+            ArrayList<ArrayList<Integer>> denoms = cr.getDenoms();
+            denoms.sort((a, b) -> b.get(0) - a.get(0));
+
+            System.out.println("\nVisszajáró: " + visszaJaro);
+            System.out.println("Kiadás folyamatban...");
+
+            for (int i = 0; i < denoms.size(); i++) {
+                ArrayList<Integer> denom = denoms.get(i);
+                int cimlet = denom.get(0);
+                int darab = denom.get(1);
+                while (visszaJaro >= cimlet && darab > 0) {
+                    visszaJaro -= cimlet;
+                    darab--;
+                    System.out.println(cimlet + " Ft...");
+                }
+
+                denom.set(1, darab);
             }
-            denom.set(1, darab);
+
+            if (visszaJaro > 0) {
+                System.out.println("A maradék visszajárandó összeg: " + visszaJaro +
+                        "\nIlyen címletünk nincsen, ezért banki utalással kapja meg a fennmaradó összeget!");
+            }
+
+            System.out.println("Köszönjük Befizetését\n");
         }
-        denoms.sort((a, b) -> b.get(0) - a.get(0));
-        if (visszaJaro > 0) {
-            System.out.println("A maradék visszajárandó összeg: " + visszaJaro + "\nIlyen címletünk nincsen, ezért banki utalással kapja meg a fennmaradó összeget!");
-        }
-        System.out.println("Köszönjük Befizetését\n");
     }
 }

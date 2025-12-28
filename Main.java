@@ -11,8 +11,11 @@ import java.io.*;
 import java.util.Scanner;
 public class Main {
     public static Scanner sc = new Scanner(System.in);
-    public static void main(String[] args) {
-        boolean run= true;
+    public static Boolean run = true;
+    static void main(String[] args) {
+        run();
+    }
+    public static void run(){
         CashRegister cr = new CashRegister();
         Config config = new Config(50000, 100000, 5000);
         Validator validator = new Validator();
@@ -48,7 +51,7 @@ public class Main {
                             System.out.print("Adja meg parkolás időtartamát percben:");
                             min = sc.nextLine().strip();
 
-                        } while (!validator.inputcheck(zone, min, config, new Transaction(zone, min,config)));
+                        } while (!validator.inputcheck(zone, min, config, new Transaction(zone, min,config),cr));
                         Transaction transaction = new Transaction(zone, min, config);
                         transaction.setFee(transaction.calculateFee());
                         ParkingMachine.transaction(transaction, cr, validator, config);
@@ -65,7 +68,6 @@ public class Main {
                 }
             }while (!valasz.equals("1") && !valasz.equals("2") && !valasz.isBlank());
         }while (run);
-
     }
 
 
