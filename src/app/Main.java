@@ -13,9 +13,6 @@ public class Main {
     public static Scanner sc = new Scanner(System.in);
     public static Boolean run = true;
     public static void main(String[] args) {
-        run();
-    }
-    public static void run(){
         CashRegister cr = new CashRegister();
         Config config = new Config(50000, 100000, 5000);
         Validator validator = new Validator();
@@ -69,10 +66,4 @@ public class Main {
             }while (!valasz.equals("1") && !valasz.equals("2") && !valasz.isBlank());
         }while (run);
     }
-
-
-
-
-
-
 }
