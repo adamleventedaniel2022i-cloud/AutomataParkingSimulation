@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Main {
     public static Scanner sc = new Scanner(System.in);
     public static Boolean run = true;
-    static void main(String[] args) {
+    public static void main(String[] args) {
         run();
     }
     public static void run(){

@@ -16,7 +16,7 @@ public class ParkingMachine {
         while (fizetendo > 0 && Main.run) {
             String input;
             do {
-                System.out.println("\nFizess (pénznemek: 2000, 1000, 500, 200, 100):");
+                System.out.println("\nFizess (címletek: 2000, 1000, 500, 200, 100):");
                 input = Main.sc.nextLine().strip();
             }while (!validator.isNumber(input));
             int money = Integer.parseInt(input);
@@ -67,7 +67,7 @@ public class ParkingMachine {
                     }
                     break;
                 default:
-                    System.out.println("Nem megfelelő pénznem (pénznemek: 2000, 1000, 500, 200, 100)");
+                    System.out.println("Nem megfelelő címlet (címletek: 2000, 1000, 500, 200, 100)");
             }
             validator.limitChecker(cr, config);
             if (Main.run){

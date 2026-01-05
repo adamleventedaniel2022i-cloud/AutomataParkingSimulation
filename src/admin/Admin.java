@@ -66,7 +66,7 @@ public record Admin(Config config) {
 
     private void penzFeltoltes(CashRegister cr, Validator validator) {
         cr.getAutomataDenoms();
-        System.out.println("Jelenlegi pénznemek a kasszában:");
+        System.out.println("Jelenlegi címletek a kasszában:");
         ArrayList<ArrayList<Integer>> penz = cr.getDenoms();
         for (ArrayList<Integer> integers : penz) {
             System.out.println("DENOM_" + integers.get(0) + ": " + integers.get(1) + " db");
@@ -76,7 +76,7 @@ public record Admin(Config config) {
         int darabszam;
         String input;
         do {
-            System.out.println("\nAdja meg a feltölteni kívánt pénznemet (2000, 1000, 500, 200, 100): ");
+            System.out.println("\nAdja meg a feltölteni kívánt címletet (2000, 1000, 500, 200, 100): ");
             input = Main.sc.nextLine().strip();
         }while (!validator.isNumber(input));
         denom = Integer.parseInt(input);
