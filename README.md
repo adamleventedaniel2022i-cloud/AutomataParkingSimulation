@@ -113,7 +113,8 @@ src/
 ### Tesztelő Csapat
 - **Lőrincz Márton** - Tesztelés vezető
 - **Csikós Bendegúz** - Tesztelő
-- **Káldor Levente Viktor** - Osztályvezető
+- **Káldor Levente Viktor** - Projectvezető
+- **Juhász Arnold** - Teszt tervező
 
 ---
 
