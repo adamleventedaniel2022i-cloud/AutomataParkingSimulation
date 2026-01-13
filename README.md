@@ -59,12 +59,11 @@ Szoftvertesztelés tantárgy projektfeladataként készült Java alkalmazás, am
 git clone https://github.com/adamleventedaniel2022i-cloud/AutomataParkingSimulation.git
 cd AutomataParkingSimulation
 
-# Fordítás
-cd src
-javac app/Main.java
+# Fordítás (rekurzívan minden .java fájlra)
+javac -d bin src/**/*.java
 
 # Futtatás
-java app.Main
+java -cp bin app.Main
 ```
 
 ## 📁 Projekt Struktúra
